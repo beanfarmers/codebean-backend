@@ -26,4 +26,21 @@ class CodeSnippet(
         this.code = code
     }
 
+    companion object {
+        fun fixture(
+            description: String = "C언어로 Hello World 출력하는 코드",
+            fileName: String = "hello_world.c",
+            code: String = """
+                #include <stdio.h>
+                
+                int main(void) {
+                    printf("Hello World!");
+                    return 0;
+                }
+                """.trimIndent(),
+        ): CodeSnippet {
+            return CodeSnippet(description, fileName, code)
+        }
+    }
+
 }

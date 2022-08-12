@@ -56,24 +56,13 @@ class CodeSnippetServiceTest @Autowired constructor(
     fun findAllTest() {
         // given
         val codeSnippets = listOf(
-            CodeSnippet(
-                description = "C언어로 Hello World 출력하는 코드",
-                fileName = "hello_world.c",
-                code = """
-                        #include <stdio.h>
-                        
-                        int main(void) {
-                            printf("Hello World!");
-                            return 0;
-                        }
-                    """.trimIndent()
-            ),
-            CodeSnippet(
+            CodeSnippet.fixture(),
+            CodeSnippet.fixture(
                 description = "Python으로 Hello World 출력하는 코드",
                 fileName = "hello_world.py",
                 code = "print(\"Hello World!\")"
             ),
-            CodeSnippet(
+            CodeSnippet.fixture(
                 description = "Java로 Hello World 출력하는 코드",
                 fileName = "HelloWorld.java",
                 code = """
@@ -106,22 +95,10 @@ class CodeSnippetServiceTest @Autowired constructor(
     @DisplayName("코드 스니펫 ID로 조회가 정상 동작한다")
     fun findByIdTest() {
         // given
-        val codeSnippet = CodeSnippet(
-            description = "C언어로 Hello World 출력하는 코드",
-            fileName = "hello_world.c",
-            code = """
-                        #include <stdio.h>
-                        
-                        int main(void) {
-                            printf("Hello World!");
-                            return 0;
-                        }
-                    """.trimIndent()
-        )
-        val savedCodeSnippet = codeSnippetRepository.save(codeSnippet)
+        val codeSnippet = codeSnippetRepository.save(CodeSnippet.fixture())
 
         // when
-        val result = codeSnippetService.findById(savedCodeSnippet.id!!)
+        val result = codeSnippetService.findById(codeSnippet.id!!)
 
         // then
         assertThat(result.description).isEqualTo(codeSnippet.description)
@@ -133,19 +110,7 @@ class CodeSnippetServiceTest @Autowired constructor(
     @DisplayName("없는 ID로 조회를 시도하면, 코드 스니펫을 조회가 실패한다")
     fun findByIdFailTest() {
         // given
-        val codeSnippet = CodeSnippet(
-            description = "C언어로 Hello World 출력하는 코드",
-            fileName = "hello_world.c",
-            code = """
-                        #include <stdio.h>
-                        
-                        int main(void) {
-                            printf("Hello World!");
-                            return 0;
-                        }
-                    """.trimIndent()
-        )
-        val savedCodeSnippet = codeSnippetRepository.save(codeSnippet)
+        val savedCodeSnippet = codeSnippetRepository.save(CodeSnippet.fixture())
 
         // when & then
         assertThrows<IllegalArgumentException> {
