@@ -1,6 +1,5 @@
 package com.litsynp.codebean.controller.codesnippet
 
-import com.litsynp.codebean.domain.codesnippet.CodeSnippet
 import com.litsynp.codebean.dto.codesnippet.request.CodeSnippetCreateRequest
 import com.litsynp.codebean.dto.codesnippet.response.CodeSnippetResponse
 import com.litsynp.codebean.service.codesnippet.CodeSnippetService

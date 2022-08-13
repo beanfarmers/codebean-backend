@@ -1,7 +1,10 @@
 package com.litsynp.codebean.domain.codesnippet
 
 import com.litsynp.codebean.domain.BaseEntity
+import java.io.File
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.Lob
 
 @Entity
@@ -14,12 +17,23 @@ class CodeSnippet(
     var code: String,
 ) : BaseEntity() {
 
+    @Enumerated(EnumType.STRING)
+    var language: SupportedLanguage
+
+    init {
+        this.language = SupportedLanguage.fromFileExtension(fileExtension)
+    }
+
+    val fileExtension: String
+        get() = File(this.fileName).extension
+
     fun updateDescription(description: String) {
         this.description = description
     }
 
     fun updateFileName(fileName: String) {
         this.fileName = fileName
+        this.language = SupportedLanguage.fromFileExtension(fileExtension)
     }
 
     fun updateCode(code: String) {
