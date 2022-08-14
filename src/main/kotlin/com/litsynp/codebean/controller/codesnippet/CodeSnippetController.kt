@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -34,10 +33,8 @@ class CodeSnippetController(
     fun list(
         @PageableDefault(size = 10, sort = ["createdOn"], direction = Sort.Direction.DESC)
         pageable: Pageable,
-        @RequestParam
-        id: Long?,
     ): ResponseEntity<Page<CodeSnippetResponse>> {
-        val results = codeSnippetService.find(pageable, id)
+        val results = codeSnippetService.find(pageable)
         return ResponseEntity.ok(results)
     }
 
