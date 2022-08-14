@@ -19,13 +19,13 @@ class CodeSnippetQueryRepository(
     /**
      * Query with no offset method
      */
-    fun find(pageable: Pageable, codeSnippetId: Long = 0): Page<CodeSnippetResponse> {
+    fun find(pageable: Pageable, codeSnippetId: Long?): Page<CodeSnippetResponse> {
         val content = getContent(codeSnippetId, pageable)
         return PageableExecutionUtils.getPage(content, pageable) { getCount() }
     }
 
     private fun getContent(
-        codeSnippetId: Long,
+        codeSnippetId: Long?,
         pageable: Pageable,
     ) = queryFactory
         .select(

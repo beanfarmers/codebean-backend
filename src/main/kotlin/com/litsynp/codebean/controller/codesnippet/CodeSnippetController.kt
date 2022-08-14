@@ -34,8 +34,8 @@ class CodeSnippetController(
     fun list(
         @PageableDefault(size = 10, sort = ["createdOn"], direction = Sort.Direction.DESC)
         pageable: Pageable,
-        @RequestParam(required = false)
-        id: Long = 0,
+        @RequestParam
+        id: Long?,
     ): ResponseEntity<Page<CodeSnippetResponse>> {
         val results = codeSnippetService.find(pageable, id)
         return ResponseEntity.ok(results)
