@@ -2,26 +2,24 @@ package com.litsynp.codebean.domain.codesnippet
 
 import com.litsynp.codebean.dto.codesnippet.response.CodeSnippetResponse
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 
 @SpringBootTest
-@TestInstance(PER_CLASS)
 class CodeSnippetQueryRepositoryTest @Autowired constructor(
-    val codeSnippetRepository: CodeSnippetRepository,
-    val codeSnippetQueryRepository: CodeSnippetQueryRepository,
+    private val codeSnippetRepository: CodeSnippetRepository,
+    private val codeSnippetQueryRepository: CodeSnippetQueryRepository,
 ) {
 
     private lateinit var codeSnippets: List<CodeSnippet>
 
-    @BeforeAll
+    @BeforeEach
     fun init() {
         codeSnippets = listOf(
             CodeSnippet.fixture(fileName = "hello1.c", code = ""),
@@ -37,6 +35,11 @@ class CodeSnippetQueryRepositoryTest @Autowired constructor(
         )
 
         codeSnippetRepository.saveAll(codeSnippets)
+    }
+
+    @AfterEach
+    fun clean() {
+        codeSnippetRepository.deleteAll()
     }
 
     @Test
