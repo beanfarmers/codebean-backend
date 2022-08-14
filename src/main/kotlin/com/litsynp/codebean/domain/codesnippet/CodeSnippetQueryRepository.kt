@@ -3,8 +3,7 @@ package com.litsynp.codebean.domain.codesnippet
 import com.litsynp.codebean.domain.codesnippet.QCodeSnippet.codeSnippet
 import com.litsynp.codebean.dto.codesnippet.response.CodeSnippetResponse
 import com.litsynp.codebean.dto.codesnippet.response.QCodeSnippetResponse
-import com.litsynp.codebean.global.util.getAllOrderSpecifiers
-import com.querydsl.core.types.OrderSpecifier
+import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -17,19 +16,17 @@ class CodeSnippetQueryRepository(
     private val queryFactory: JPAQueryFactory,
 ) {
 
-    companion object {
-        private val ORDERING_FIELD_NAMES = listOf("id", "fileName", "createdOn")
-    }
-
-    fun find(pageable: Pageable): Page<CodeSnippetResponse> {
-        val orderSpecifiers = getAllOrderSpecifiers(pageable, ORDERING_FIELD_NAMES).toTypedArray()
-        val content = getContent(pageable, orderSpecifiers)
+    /**
+     * Query with no offset method
+     */
+    fun find(pageable: Pageable, codeSnippetId: Long = 0): Page<CodeSnippetResponse> {
+        val content = getContent(codeSnippetId, pageable)
         return PageableExecutionUtils.getPage(content, pageable) { getCount() }
     }
 
     private fun getContent(
+        codeSnippetId: Long,
         pageable: Pageable,
-        orderSpecifiers: Array<OrderSpecifier<*>>,
     ) = queryFactory
         .select(
             QCodeSnippetResponse(
@@ -42,10 +39,15 @@ class CodeSnippetQueryRepository(
             )
         )
         .from(codeSnippet)
-        .orderBy(*orderSpecifiers)
+        .where(ltCodeSnippetId(codeSnippetId))
+        .orderBy(codeSnippet.id.desc())
         .offset(pageable.offset)
         .limit(pageable.pageSize.toLong())
         .fetch()
+
+    private fun ltCodeSnippetId(codeSnippetId: Long?): BooleanExpression? {
+        return if (codeSnippetId != null) codeSnippet.id.lt(codeSnippetId) else null
+    }
 
     private fun getCount(): Long {
         return queryFactory

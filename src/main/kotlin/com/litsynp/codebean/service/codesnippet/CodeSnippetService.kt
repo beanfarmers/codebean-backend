@@ -34,8 +34,8 @@ class CodeSnippetService(
     }
 
     @Transactional(readOnly = true)
-    fun find(pageable: Pageable): Page<CodeSnippetResponse> {
-        return codeSnippetQueryRepository.find(pageable)
+    fun find(pageable: Pageable, codeSnippetId: Long = 0): Page<CodeSnippetResponse> {
+        return codeSnippetQueryRepository.find(pageable, codeSnippetId)
     }
 
     fun findById(id: Long): CodeSnippetResponse {
