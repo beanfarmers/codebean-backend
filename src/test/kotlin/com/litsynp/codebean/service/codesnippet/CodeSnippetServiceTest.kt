@@ -163,7 +163,7 @@ class CodeSnippetServiceTest @Autowired constructor(
     @DisplayName("없는 ID로 조회를 시도하면, 코드 스니펫을 조회가 실패한다")
     fun findByIdFailTest() {
         // given
-        val savedCodeSnippet = codeSnippetRepository.save(CodeSnippet.fixture())
+        codeSnippetRepository.save(CodeSnippet.fixture())
 
         // when & then
         assertThrows<IllegalArgumentException> {

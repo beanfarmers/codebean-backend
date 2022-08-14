@@ -3,6 +3,10 @@ package com.litsynp.codebean.controller.codesnippet
 import com.litsynp.codebean.dto.codesnippet.request.CodeSnippetCreateRequest
 import com.litsynp.codebean.dto.codesnippet.response.CodeSnippetResponse
 import com.litsynp.codebean.service.codesnippet.CodeSnippetService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -26,8 +30,11 @@ class CodeSnippetController(
     }
 
     @GetMapping
-    fun list(): ResponseEntity<List<CodeSnippetResponse>> {
-        val results = codeSnippetService.findAll()
+    fun list(
+        @PageableDefault(size = 10, sort = ["createdOn"], direction = Sort.Direction.DESC)
+        pageable: Pageable,
+    ): ResponseEntity<Page<CodeSnippetResponse>> {
+        val results = codeSnippetService.find(pageable)
         return ResponseEntity.ok(results)
     }
 
